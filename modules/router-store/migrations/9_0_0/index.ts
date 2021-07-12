@@ -13,13 +13,13 @@ import {
   insertImport,
   Change,
   containsProperty,
-} from '@ngrx/router-store/schematics-core';
+} from '../../schematics-core';
 
 function addDefaultSerializer(): Rule {
   const SERIALIZER_PROPERTY = 'serializer: DefaultRouterStateSerializer';
   return (tree: Tree, ctx: SchematicContext) => {
     visitTSSourceFiles(tree, (sourceFile) => {
-      let changes: Change[] = [];
+      const changes: Change[] = [];
 
       visitNgModuleImports(sourceFile, (importsNode, elementsNode) => {
         elementsNode

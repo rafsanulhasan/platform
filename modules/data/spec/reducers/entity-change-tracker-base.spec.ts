@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import { EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import {
   EntityCollection,
@@ -56,7 +57,6 @@ describe('EntityChangeTrackerBase', () => {
 
   describe('#commitOne', () => {
     it('should clear current tracking of the given entity', () => {
-      // tslint:disable-next-line:prefer-const
       let {
         collection,
         deletedEntity,
@@ -72,7 +72,6 @@ describe('EntityChangeTrackerBase', () => {
 
   describe('#commitMany', () => {
     it('should clear current tracking of the given entities', () => {
-      // tslint:disable-next-line:prefer-const
       let {
         collection,
         deletedEntity,
@@ -581,6 +580,22 @@ describe('EntityChangeTrackerBase', () => {
       const collection = tracker.trackDeleteMany(['1234', 456], origCollection);
       expect(collection).toBe(origCollection);
     });
+
+    it('should not mutate changeState when called on a tracked "updated" entity', () => {
+      const existingEntity = getFirstExistingEntity();
+      const updatedEntity = toUpdate({
+        ...existingEntity,
+        name: 'test update',
+      });
+      const collection = tracker.trackUpdateOne(updatedEntity, origCollection);
+      const change = collection.changeState[existingEntity!.id];
+      expect(change).toBeDefined();
+      expectChangeType(change, ChangeType.Updated);
+      Object.freeze(change);
+      expect(() => {
+        tracker.trackDeleteMany([existingEntity!.id], collection);
+      }).not.toThrowError();
+    });
   });
 
   describe('#trackUpdateOne', () => {
@@ -820,7 +835,6 @@ describe('EntityChangeTrackerBase', () => {
     });
 
     it('should restore the collection to the pre-change state', () => {
-      // tslint:disable-next-line:prefer-const
       let {
         collection,
         addedEntity,
@@ -856,7 +870,6 @@ describe('EntityChangeTrackerBase', () => {
     });
 
     it('should restore the collection to the pre-change state for the given entity', () => {
-      // tslint:disable-next-line:prefer-const
       let {
         collection,
         addedEntity,
@@ -873,7 +886,6 @@ describe('EntityChangeTrackerBase', () => {
     });
 
     it('should do nothing when the given entity is null', () => {
-      // tslint:disable-next-line:prefer-const
       let {
         collection,
         addedEntity,
@@ -891,7 +903,6 @@ describe('EntityChangeTrackerBase', () => {
 
   describe('#undoMany', () => {
     it('should clear many tracked changes', () => {
-      // tslint:disable-next-line:prefer-const
       let {
         collection,
         addedEntity,
@@ -911,7 +922,6 @@ describe('EntityChangeTrackerBase', () => {
     });
 
     it('should restore the collection to the pre-change state for the given entities', () => {
-      // tslint:disable-next-line:prefer-const
       let {
         collection,
         addedEntity,
@@ -931,7 +941,6 @@ describe('EntityChangeTrackerBase', () => {
     });
 
     it('should do nothing when there are no entities to undo', () => {
-      // tslint:disable-next-line:prefer-const
       let {
         collection,
         addedEntity,

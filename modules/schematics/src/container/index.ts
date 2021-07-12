@@ -26,7 +26,7 @@ import {
   getProjectPath,
   omit,
   parseName,
-} from '@ngrx/schematics/schematics-core';
+} from '../../schematics-core';
 import { Schema as ContainerOptions } from './schema';
 
 function addStateToComponent(options: Partial<ContainerOptions>) {
@@ -126,7 +126,7 @@ export default function (options: ContainerOptions): Rule {
     options.name = parsedPath.name;
     options.path = parsedPath.path;
 
-    const opts = ['state', 'stateInterface'].reduce(
+    const opts = ['state', 'stateInterface', 'testDepth'].reduce(
       (current: Partial<ContainerOptions>, key) => {
         return omit(current, key as any);
       },

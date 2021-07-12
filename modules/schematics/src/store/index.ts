@@ -28,7 +28,7 @@ import {
   addImportToModule,
   parseName,
   visitNgModuleImports,
-} from '@ngrx/schematics/schematics-core';
+} from '../../schematics-core';
 import { Schema as StoreOptions } from './schema';
 
 function addImportToNgModule(options: StoreOptions): Rule {
@@ -121,7 +121,7 @@ function addImportToNgModule(options: StoreOptions): Rule {
       // `addImportToModule` adds a comma to imports when there are already imports present
       // because at this time the store import hasn't been committed yet, `addImportToModule` wont add a comma
       // so we have to add it here for empty import arrays
-      let adjectiveComma = hasImports ? '' : ', ';
+      const adjectiveComma = hasImports ? '' : ', ';
 
       const storeDevtoolsNgModuleImport = addImportToModule(
         source,

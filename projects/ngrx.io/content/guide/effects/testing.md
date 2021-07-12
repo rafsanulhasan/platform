@@ -139,7 +139,7 @@ testScheduler.run(({ cold, hot, expectObservable }) => {
 });
 </code-example>
 
-By using the `TestScheduler` we can also test effects dependant on a scheduler.
+By using the `TestScheduler` we can also test effects dependent on a scheduler.
 Instead of creating an effect as a method to override properties in test cases, as shown in [`Effects with parameters`](#effects-with-parameters), we can rewrite the test case by using the `TestScheduler`.
 
 <code-example header="my.effects.spec.ts">
@@ -183,8 +183,10 @@ effects.getAll$.subscribe(action => {
     type: '[Customers API] Get Customers Success',
     customers: [...],
   });
+  done();
 });
 </code-example>
+
 
 ### With `ReplaySubject`
 
@@ -206,6 +208,7 @@ effects.getAll$.subscribe(action => {
     type: '[Customers API] Get Customers Success',
     customers: [...],
   });
+  done();
 });
 </code-example>
 
@@ -292,22 +295,28 @@ it('should get customers', () => {
   // create the effect
   const effects = new CustomersEffects(actions, customersServiceSpy);
 
-  // expect remains the same
-  effects.getAll$.subscribe(action => {
-    expect(action).toEqual({
+  const expected = hot('-a--', {
+    a: {
       type: '[Customers API] Get Customers Success',
       customers: [...],
-    });
+    }
   });
+
+  // expect remains the same
+  expect(effects.getAll$).toBeObservable(expected);
 })
 </code-example>
 
-For an Effect with store interaction, it's possible to create an Observable `Store`.
+For an Effect with store interaction, use `getMockStore` to create a new instance of `MockStore`.
 
 <code-example header="my.effects.spec.ts">
 it('should get customers', () => {
-  // create the store, this can be just an Observable
-  const store = of({}) as Store&lt;Action&gt;;
+  // create the store, and provide selectors.
+  const store = getMockStore({
+      selectors: [
+        { selector: selectCustomers, value: { Bob: { name: 'Bob' } } }
+      ]
+  });
 
   // instead of using `provideMockActions`,
   // define the actions stream by creating a new `Actions` instance
@@ -317,13 +326,8 @@ it('should get customers', () => {
     })
   );
 
-  // mock the selector
-  selectCustomers.setResult({
-    Bob: { name: 'Bob' },
-  });
-
   // create the effect
-  const effects = new CustomersEffects(store, actions, customersServiceSpy);
+  const effects = new CustomersEffects(store as Store, actions, customersServiceSpy);
 
   // there is no output, because Bob is already in the Store state
   const expected = hot('----');

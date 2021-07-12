@@ -56,9 +56,15 @@ Specifies if api success and failure actions should be generated.
 
 Generate a spec file alongside the action file.
 
-- `--skipTests`
+- `--skip-tests`
   - Type: `boolean`
   - Default: `false`
+
+Specify the prefix for the actions.
+
+- `--prefix`
+  - Type: `string`
+  - Default: `load`
 
 ## Examples
 

@@ -1,3 +1,4 @@
+import * as ts from 'typescript';
 import { Path } from '@angular-devkit/core';
 import {
   apply,
@@ -26,8 +27,7 @@ import {
   ReplaceChange,
   stringUtils,
   visitTSSourceFiles,
-} from '@ngrx/data/schematics-core';
-import * as ts from 'typescript';
+} from '../../schematics-core';
 import { Schema as EntityDataOptions } from './schema';
 
 function addNgRxDataToPackageJson() {
@@ -201,7 +201,7 @@ function findNgrxDataImportDeclarations(
 
 function findNgrxDataReplacements(sourceFile: ts.SourceFile) {
   const renameKeys = Object.keys(renames);
-  let changes: ReplaceChange[] = [];
+  const changes: ReplaceChange[] = [];
   ts.forEachChild(sourceFile, (node) => find(node, changes));
   return changes;
 

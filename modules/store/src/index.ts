@@ -12,11 +12,13 @@ export {
   Selector,
   SelectorWithProps,
   RuntimeChecks,
+  FunctionWithParametersType,
 } from './models';
 export { createAction, props, union } from './action_creator';
 export { Store, select } from './store';
 export { combineReducers, compose, createReducerFactory } from './utils';
 export { ActionsSubject, INIT } from './actions_subject';
+export { createFeature, FeatureConfig } from './feature_creator';
 export { setNgrxMockEnvironment, isNgrxMockEnvironment } from './flags';
 export {
   ReducerManager,
@@ -48,6 +50,7 @@ export {
   FEATURE_REDUCERS,
   USER_PROVIDED_META_REDUCERS,
   USER_RUNTIME_CHECKS,
+  ACTIVE_RUNTIME_CHECKS,
 } from './tokens';
 export {
   StoreModule,
